@@ -1,10 +1,10 @@
-import { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Container, Header, List } from 'semantic-ui-react';
+import { Button, Container } from 'semantic-ui-react';
 import { Activity } from '../models/activity';
 import NavBar from './NavBar';
 import ActivityDashBoard from '../../features/activities/dashboard/ActivityDashboard';
-
+import {v4 as uuid} from 'uuid'
 
 
 
@@ -43,9 +43,13 @@ function App() {
   function handleCreateOrEditActivity(activity:Activity){
     activity.id
       ? setActivities([...Activities.filter(x=>x.id != activity.id), activity])
-      : setActivities([...Activities, activity]);
+      : setActivities([...Activities, {...activity, id:uuid()}]);
     setEditMode(false);
     setSelectedActivity(activity);
+  }
+
+  function handleDeleteSelectActivity(id:string){
+    setActivities([...Activities.filter(x=>x.id !== id)])
   }
 
   return (
@@ -60,6 +64,7 @@ function App() {
            openForm={handleFormOpen}  
            closeForm={handleFormClose}
            createOrEdit={handleCreateOrEditActivity}
+           deleteActivity={handleDeleteSelectActivity}
           />
           </Container>
         <Button content='test' />
